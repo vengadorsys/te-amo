@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmacología HTA · DM2 · Depresión</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Farmacología <span class="muted">HTA · DM2 · Depresión</span></h1>
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="flash" role="tab">Flashcards</button>
+        <button class="tab" data-tab="corr" role="tab">Correlación</button>
+        <button class="tab" data-tab="casos" role="tab">Casos clínicos</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- ================= FLASHCARDS ================= -->
+    <section id="flash" class="panel active">
+      <div class="toolbar">
+        <div class="seg" id="flashMode">
+          <button data-v="familia" class="on">Por familia</button>
+          <button data-v="farmaco">Por fármaco</button>
+          <button data-v="mecanismo">Por mecanismo</button>
+        </div>
+        <div class="seg small" id="flashEnf">
+          <button data-v="all" class="on">Todas</button>
+          <button data-v="hta">HTA</button>
+          <button data-v="dm2">DM2</button>
+          <button data-v="dep">Depresión</button>
+        </div>
+      </div>
+
+      <div class="progress-row">
+        <span id="flashCount">1 / 1</span>
+        <span class="muted" id="flashStats"></span>
+      </div>
+      <div class="bar"><div id="flashBar"></div></div>
+
+      <div class="card-stage">
+        <div class="flashcard" id="flashcard" tabindex="0" aria-live="polite">
+          <div class="face front" id="cardFront"></div>
+          <div class="face back" id="cardBack"></div>
+        </div>
+      </div>
+      <p class="hint">Toca la tarjeta (o barra espaciadora) para voltearla · ← → para moverte</p>
+
+      <div class="actions">
+        <button class="btn ghost" id="prevCard">← Anterior</button>
+        <button class="btn bad" id="reviewCard">Repasar</button>
+        <button class="btn good" id="knowCard">Lo sabía</button>
+        <button class="btn ghost" id="nextCard">Siguiente →</button>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="shuffleCards">Barajar</button>
+        <button class="btn ghost" id="onlyReview">Sólo las de «Repasar»</button>
+        <button class="btn ghost" id="resetFlash">Reiniciar</button>
+      </div>
+    </section>
+
+    <!-- ================= CORRELACIÓN ================= -->
+    <section id="corr" class="panel">
+      <div class="toolbar">
+        <label class="field">Tipo
+          <select id="corrMode">
+            <option value="f2fam">Fármaco → Familia</option>
+            <option value="fam2f">Familia → Fármaco</option>
+            <option value="f2f">Fármaco → otro fármaco de su familia</option>
+            <option value="mec2fam">Mecanismo → Familia</option>
+            <option value="letras">Estilo examen (letras)</option>
+          </select>
+        </label>
+        <label class="field">Tema
+          <select id="corrEnf">
+            <option value="all">Todas</option>
+            <option value="hta">HTA</option>
+            <option value="dm2">DM2</option>
+            <option value="dep">Depresión</option>
+          </select>
+        </label>
+        <label class="field">Filas
+          <select id="corrN">
+            <option>5</option><option selected>10</option><option>15</option><option>20</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" id="corrHelp"> Autocompletar</label>
+      </div>
+
+      <p class="muted" id="corrInstr"></p>
+      <div id="corrLetters" class="letters" hidden></div>
+      <div class="table-wrap">
+        <table class="corr">
+          <thead><tr><th>#</th><th id="corrLeftHead">Fármaco</th><th id="corrRightHead">Tu respuesta</th></tr></thead>
+          <tbody id="corrBody"></tbody>
+        </table>
+      </div>
+      <datalist id="dlFamilias"></datalist>
+      <datalist id="dlFarmacos"></datalist>
+
+      <div class="score" id="corrScore" hidden></div>
+      <div class="actions">
+        <button class="btn primary" id="corrCheck">Calificar</button>
+        <button class="btn ghost" id="corrShow">Mostrar respuestas</button>
+        <button class="btn ghost" id="corrReset">Reiniciar ↻</button>
+      </div>
+    </section>
+
+    <!-- ================= CASOS ================= -->
+    <section id="casos" class="panel">
+      <div class="toolbar">
+        <label class="field">Tema
+          <select id="casoEnf">
+            <option value="all">Todas</option>
+            <option value="hta">HTA</option>
+            <option value="dm2">DM2</option>
+            <option value="dep">Depresión</option>
+            <option value="mix">Paciente con las tres</option>
+          </select>
+        </label>
+        <label class="field">Tipo
+          <select id="casoTipo">
+            <option value="all">Todos</option>
+            <option value="elegir">Elegir según el paciente</option>
+            <option value="adverso">Efecto adverso → fármaco</option>
+            <option value="fijo">Minicasos del documento</option>
+            <option value="clasif">Clasificar la PA (GPC)</option>
+            <option value="imc">IMC (NOM-008)</option>
+          </select>
+        </label>
+        <div class="score-pill" id="casoScore">0 / 0</div>
+      </div>
+
+      <article class="caso" id="caso">
+        <div class="caso-tag" id="casoTag"></div>
+        <p class="caso-text" id="casoText"></p>
+        <div class="opts" id="casoOpts"></div>
+        <div class="exp" id="casoExp" hidden></div>
+      </article>
+
+      <div class="actions">
+        <button class="btn primary" id="casoNext">Nuevo caso ↻</button>
+        <button class="btn ghost" id="casoResetScore">Reiniciar marcador</button>
+      </div>
+    </section>
+
+    <footer class="foot muted">
+      Basado en la guía «Sesiones Anatomoclínicas: HTA, diabetes tipo 2 y depresión». Documento de estudio, no de prescripción.
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
