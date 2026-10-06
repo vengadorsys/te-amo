@@ -19,7 +19,7 @@
   --radius: 14px;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #17131a;
     --surface: #221c25;
     --surface-2: #2c2530;
@@ -37,7 +37,28 @@
     --dep: #b195f0;
     --mix: #e0ac58;
     --shadow: 0 6px 24px rgba(0, 0, 0, .35);
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #17131a;
+  --surface: #221c25;
+  --surface-2: #2c2530;
+  --text: #f1e9ee;
+  --muted: #a99ba4;
+  --line: #3a3140;
+  --accent: #f07ba0;
+  --accent-soft: #42222f;
+  --good: #4cc790;
+  --good-soft: #17352a;
+  --bad: #f07070;
+  --bad-soft: #3e1d1f;
+  --hta: #f07ba0;
+  --dm2: #6aa8ee;
+  --dep: #b195f0;
+  --mix: #e0ac58;
+  --shadow: 0 6px 24px rgba(0, 0, 0, .35);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -54,7 +75,7 @@ button, select, input { font: inherit; color: inherit; }
 
 /* ---------- header ---------- */
 .top {
-  position: sticky; top: 0; z-index: 10;
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
