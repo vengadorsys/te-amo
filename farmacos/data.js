@@ -563,3 +563,65 @@ const CASOS_FIJOS = [
   { enf: "dep", t: "Tras la remisión de un primer episodio depresivo, ¿cuánto tiempo mantienes el antidepresivo?", ops: ["Suspender al mejorar", "1 mes", "Al menos 6–12 meses", "De por vida siempre"], ok: 2, exp: "Mantener al menos 6–12 meses para evitar recaídas (más si hubo episodios repetidos). Suspender gradualmente." },
   { enf: "hta", t: "Paciente que pasará de enalapril a sacubitrilo/valsartán por IC. ¿Qué precaución?", ops: ["Darlos juntos una semana", "Esperar 36 h tras suspender el IECA", "Suspender también el BB", "No hay precaución"], ok: 1, exp: "IECA + neprilisina inhibida = mucho riesgo de angioedema. Esperar 36 h." }
 ];
+
+/* ---------- TABLAS PARA LLENAR ----------
+   Cada celda: texto (respuesta) · alt: otras respuestas válidas · fijo: no se pide
+   tipo: "num" (rango numérico) · "txt" (nombre) · "con" (conector y / y/o) */
+const T = (v, o = {}) => ({ v, tipo: "num", ...o });
+const N = (v, alt = [], o = {}) => ({ v, tipo: "txt", alt, ...o });
+const Y = (v) => ({ v, tipo: "con" });
+
+const TABLAS = [
+  {
+    id: "hta", nombre: "HTA (GPC)", enf: "hta",
+    titulo: "Clasificación de la PA según la GPC mexicana (IMSS), en mmHg",
+    nota: "Se diagnostica HTA con ≥140 y/o ≥90 mmHg confirmada en varias visitas. Si sistólica y diastólica caen en grados distintos, se clasifica por la más alta.",
+    cols: ["Categoría", "Sistólica", "", "Diastólica"],
+    filas: [
+      [N("Óptima", ["optima"]), T("<120"), Y("y"), T("<80")],
+      [N("Normal"), T("120–129"), Y("y/o"), T("80–84")],
+      [N("Normal alta", ["normal alta", "presion normal alta"]), T("130–139"), Y("y/o"), T("85–89")],
+      [N("HTA grado 1", ["grado 1", "hta 1", "hipertension grado 1", "grado i", "hta grado i"]), T("140–159"), Y("y/o"), T("90–99")],
+      [N("HTA grado 2", ["grado 2", "hta 2", "hipertension grado 2", "grado ii", "hta grado ii"]), T("160–179"), Y("y/o"), T("100–109")],
+      [N("HTA grado 3", ["grado 3", "hta 3", "hipertension grado 3", "grado iii", "hta grado iii"]), T("≥180"), Y("y/o"), T("≥110")],
+      [N("HTA sistólica aislada", ["sistolica aislada", "hipertension sistolica aislada"]), T("≥140"), Y("y"), T("<90")]
+    ]
+  },
+  {
+    id: "dm2", nombre: "Diagnóstico DM2", enf: "dm2",
+    titulo: "Criterios diagnósticos de diabetes y prediabetes (ADA)",
+    nota: "Sin síntomas, se confirma con una segunda prueba alterada. Metas habituales: A1c <7 %, glucosa en ayuno 80–130 mg/dL, posprandial <180 mg/dL.",
+    cols: ["Prueba", "Prediabetes", "Diabetes"],
+    filas: [
+      [N("Glucosa en ayuno (≥8 h)", ["glucosa en ayuno", "glucosa de ayuno", "ayuno", "glucemia en ayuno"]), T("100–125 mg/dL"), T("≥126 mg/dL")],
+      [N("Hemoglobina glucosilada (A1c)", ["a1c", "hba1c", "hemoglobina glucosilada", "hemoglobina glicosilada", "hemoglobina glucosilada a1c"]), T("5.7–6.4 %"), T("≥6.5 %")],
+      [N("Glucosa 2 h tras 75 g (PTOG)", ["ptog", "curva de tolerancia", "tolerancia oral a la glucosa", "glucosa 2 h", "glucosa a las 2 h", "prueba de tolerancia oral a la glucosa", "glucosa 2 horas"]), T("140–199 mg/dL"), T("≥200 mg/dL")],
+      [N("Glucosa al azar + síntomas clásicos", ["glucosa al azar", "azar", "glucosa casual", "glucosa al azar con sintomas"]), T("—", { fijo: true }), T("≥200 mg/dL")]
+    ]
+  },
+  {
+    id: "imcoms", nombre: "IMC (OMS)", enf: "dm2",
+    titulo: "Clasificación del IMC en adultos (OMS)",
+    nota: "IMC = peso (kg) ÷ talla (m)². Ejemplo: 80 kg y 1.70 m → 80 ÷ 2.89 = 27.7 kg/m² → sobrepeso.",
+    cols: ["Clasificación", "IMC (kg/m²)"],
+    filas: [
+      [N("Bajo peso"), T("<18.5")],
+      [N("Peso normal", ["normal", "normopeso"]), T("18.5–24.9")],
+      [N("Sobrepeso (preobesidad)", ["sobrepeso", "preobesidad"]), T("25.0–29.9")],
+      [N("Obesidad grado I", ["obesidad 1", "obesidad grado 1", "obesidad i", "obesidad tipo 1", "obesidad clase 1"]), T("30.0–34.9")],
+      [N("Obesidad grado II", ["obesidad 2", "obesidad grado 2", "obesidad ii", "obesidad tipo 2", "obesidad clase 2"]), T("35.0–39.9")],
+      [N("Obesidad grado III (mórbida)", ["obesidad 3", "obesidad grado 3", "obesidad iii", "obesidad morbida", "obesidad grado iii", "obesidad tipo 3", "obesidad clase 3"]), T("≥40")]
+    ]
+  },
+  {
+    id: "imcnom", nombre: "IMC (NOM-008)", enf: "dm2",
+    titulo: "Sobrepeso y obesidad según la NOM-008-SSA3-2017 (México)",
+    nota: "La NOM baja los cortes en talla baja y los sube en adultos mayores. Riesgo por cintura: ≥90 cm hombres, ≥80 cm mujeres.",
+    cols: ["Grupo", "Sobrepeso", "Obesidad"],
+    filas: [
+      [N("Adultos de 20 a 59 años", ["adultos", "adulto", "20 a 59 anos", "adultos de 20 a 59"]), T("25.0–29.9"), T("≥30")],
+      [N("Talla baja (hombre <1.60 m, mujer <1.50 m)", ["talla baja", "adultos con talla baja"]), T("23.0–24.9"), T("≥25")],
+      [N("Adultos de 60 años o más", ["60 anos o mas", "adultos mayores", "adulto mayor", "mayores de 60", "60 o mas"]), T("28.0–31.9"), T("≥32")]
+    ]
+  }
+];

@@ -203,6 +203,36 @@ tr.ko .fix { color: var(--bad); }
 .exp .verdict.good { color: var(--good); }
 .exp .verdict.bad { color: var(--bad); }
 
+/* ---------- tablas para llenar ---------- */
+.tabla-titulo { font-size: 1.1rem; margin: 4px 0 4px; text-wrap: balance; }
+.tabla-ayuda { font-size: .88rem; margin: 0 0 10px; }
+.tabla-nota { font-size: .9rem; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+.keys { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.keys button {
+  min-width: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); font-weight: 700; cursor: pointer;
+}
+.keys button:active { background: var(--accent-soft); }
+table.fill { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); font-variant-numeric: tabular-nums; }
+table.fill th { background: var(--accent); color: #fff; text-align: left; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; padding: 10px; }
+table.fill td { border-top: 1px solid var(--line); padding: 8px 8px; vertical-align: top; }
+table.fill td.lab { font-weight: 700; }
+table.fill td.con { width: 52px; color: var(--muted); text-align: center; }
+table.fill td.given { color: var(--text); }
+table.fill input {
+  width: 100%; min-width: 58px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); color: var(--text); font-variant-numeric: tabular-nums;
+}
+table.fill input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+table.fill td.ok { background: var(--good-soft); }
+table.fill td.ok input { border-color: var(--good); }
+table.fill td.ko { background: var(--bad-soft); }
+table.fill td.ko input { border-color: var(--bad); }
+table.fill td.ok .fix { color: var(--good); }
+table.fill td.ko .fix { color: var(--bad); }
+table.fill td.con input { min-width: 40px; }
+table.fill .fix { font-size: .85rem; font-weight: 700; margin-top: 4px; }
+
 .foot { font-size: .8rem; text-align: center; padding: 24px 0 40px; }
 
 @media (max-width: 560px) {

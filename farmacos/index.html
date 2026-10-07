@@ -13,6 +13,7 @@
       <nav class="tabs" role="tablist">
         <button class="tab active" data-tab="flash" role="tab">Flashcards</button>
         <button class="tab" data-tab="corr" role="tab">Correlación</button>
+        <button class="tab" data-tab="tablas" role="tab">Tablas</button>
         <button class="tab" data-tab="casos" role="tab">Casos clínicos</button>
       </nav>
     </div>
@@ -106,6 +107,41 @@
         <button class="btn primary" id="corrCheck">Calificar</button>
         <button class="btn ghost" id="corrShow">Mostrar respuestas</button>
         <button class="btn ghost" id="corrReset">Reiniciar ↻</button>
+      </div>
+    </section>
+
+    <!-- ================= TABLAS ================= -->
+    <section id="tablas" class="panel">
+      <div class="toolbar">
+        <div class="seg" id="tablaSel"></div>
+      </div>
+      <div class="toolbar">
+        <div class="seg small" id="tablaNivel">
+          <button data-v="facil" class="on">Algunos huecos</button>
+          <button data-v="normal">Todos los valores</button>
+          <button data-v="dificil">Todo en blanco</button>
+        </div>
+      </div>
+
+      <h2 class="tabla-titulo" id="tablaTitulo"></h2>
+      <p class="muted tabla-ayuda">Escribe rangos como <b>120-129</b> y límites como <b>&lt;80</b> o <b>≥180</b> (también vale <b>&gt;=180</b>). Las unidades son opcionales.</p>
+      <div class="keys" id="tablaKeys" aria-label="Insertar símbolo">
+        <button type="button" data-k="≥">≥</button>
+        <button type="button" data-k="<">&lt;</button>
+        <button type="button" data-k="–">–</button>
+        <button type="button" data-k=".">.</button>
+        <button type="button" data-k="y/o">y/o</button>
+      </div>
+      <div class="table-wrap">
+        <table class="fill" id="tablaFill"></table>
+      </div>
+      <p class="muted tabla-nota" id="tablaNota" hidden></p>
+
+      <div class="score" id="tablaScore" hidden></div>
+      <div class="actions">
+        <button class="btn primary" id="tablaCheck">Calificar</button>
+        <button class="btn ghost" id="tablaShow">Mostrar respuestas</button>
+        <button class="btn ghost" id="tablaReset">Reiniciar ↻</button>
       </div>
     </section>
 

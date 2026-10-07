@@ -445,9 +445,116 @@
   $("#casoResetScore").addEventListener("click", () => { K.ok = 0; K.total = 0; $("#casoScore").textContent = "0 / 0"; nuevoCaso(); });
   ["#casoEnf", "#casoTipo"].forEach((s) => $(s).addEventListener("change", nuevoCaso));
 
+  /* ================= TABLAS PARA LLENAR ================= */
+  const TB = { id: TABLAS[0].id, nivel: "facil", celdas: [] };
+
+  // forma canónica de un valor numérico: «≥ 126 mg/dL» → «≥126», «25,0 a 29,9» → «25-29.9»
+  function canonNum(s) {
+    let v = String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    v = v.replace(/mg\s*\/?\s*dl|mmhg|kg\s*\/?\s*m\s*(2|²)?|%|anos|cm|\bm\b/g, " ");
+    v = v.replace(/mayor(es)?\s+o\s+igual(es)?(\s+(a|que))?|>=|=>|≥/g, "≥");
+    v = v.replace(/menor(es)?(\s+(a|que|de))?|<|＜/g, "<");
+    v = v.replace(/(\d),(\d)/g, "$1.$2").replace(/[–—−‒]/g, "-");
+    v = v.replace(/(\d)\s*(a|al|hasta)\s*(\d)/g, "$1-$3");
+    v = v.replace(/\s+/g, "");
+    v = v.replace(/\d+(\.\d+)?/g, (m) => String(parseFloat(m)));
+    return v;
+  }
+  const canonCon = (s) => norm(s).replace(/\s+/g, "") === "yo" ? "y/o" : norm(s).replace(/\s+/g, "") === "y" ? "y" : String(s).replace(/\s+/g, "").toLowerCase();
+  function celdaOk(c, val) {
+    if (!val.trim()) return false;
+    if (c.tipo === "num") return canonNum(val) === canonNum(c.v);
+    if (c.tipo === "con") return canonCon(val) === c.v;
+    const v = norm(val);
+    return [c.v, c.v.replace(/\s*\(.*\)\s*/, ""), ...(c.alt || [])].map(norm).includes(v);
+  }
+
+  function renderSelTablas() {
+    $("#tablaSel").innerHTML = TABLAS.map((t) => `<button data-v="${t.id}" class="${t.id === TB.id ? "on" : ""}">${esc(t.nombre)}</button>`).join("");
+  }
+
+  function buildTabla() {
+    const t = TABLAS.find((x) => x.id === TB.id);
+    $("#tablaTitulo").textContent = t.titulo;
+    $("#tablaNota").textContent = t.nota;
+    $("#tablaNota").hidden = true;
+    $("#tablaScore").hidden = true;
+    $("#tablaKeys").querySelector('[data-k="y/o"]').hidden = t.id !== "hta";
+
+    // decidir qué celdas se piden
+    const candidatas = [];
+    t.filas.forEach((fila, r) => fila.forEach((c, k) => {
+      if (c.fijo) return;
+      if (k === 0 && TB.nivel !== "dificil") return; // las etiquetas sólo se piden en «Todo en blanco»
+      candidatas.push(`${r}:${k}`);
+    }));
+    let pedir;
+    if (TB.nivel === "facil") {
+      const n = Math.max(3, Math.round(candidatas.length * 0.45));
+      pedir = new Set(shuffle(candidatas).slice(0, n));
+    } else pedir = new Set(candidatas);
+
+    TB.celdas = [];
+    const head = `<thead><tr>${t.cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>`;
+    const body = t.filas.map((fila, r) => `<tr>${fila.map((c, k) => {
+      const cls = k === 0 ? "lab" : c.tipo === "con" ? "con" : "";
+      if (!pedir.has(`${r}:${k}`)) return `<td class="${cls} given">${esc(c.v)}</td>`;
+      const i = TB.celdas.push(c) - 1;
+      const w = "";
+      return `<td class="${cls}"><input type="text" data-i="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" ${w} aria-label="${esc(t.cols[k] || "Conector")} de ${esc(fila[0].v)}"><div class="fix"></div></td>`;
+    }).join("")}</tr>`).join("");
+    $("#tablaFill").innerHTML = head + `<tbody>${body}</tbody>`;
+  }
+
+  function checkTabla(reveal = false) {
+    let good = 0;
+    $$("#tablaFill input").forEach((inp) => {
+      const c = TB.celdas[+inp.dataset.i];
+      const td = inp.parentElement;
+      const ok = celdaOk(c, inp.value);
+      if (ok) good++;
+      td.classList.toggle("ok", ok);
+      td.classList.toggle("ko", !ok);
+      td.querySelector(".fix").textContent = ok ? "✓" : `${inp.value.trim() ? "✗" : "—"} ${c.v}`;
+    });
+    const n = TB.celdas.length, pct = n ? Math.round((good / n) * 100) : 0;
+    const s = $("#tablaScore");
+    s.hidden = false;
+    s.textContent = reveal ? "Respuestas mostradas" : `${good} / ${n} correctas (${pct} %)${pct === 100 ? " 🎉" : ""}`;
+    $("#tablaNota").hidden = false;
+  }
+
+  // teclado de símbolos: inserta en el último campo enfocado
+  let lastInput = null;
+  $("#tablaFill").addEventListener("focusin", (e) => { if (e.target.tagName === "INPUT") lastInput = e.target; });
+  $("#tablaKeys").addEventListener("mousedown", (e) => e.preventDefault()); // no robar el foco
+  $("#tablaKeys").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    const inp = lastInput && document.body.contains(lastInput) ? lastInput : $("#tablaFill input");
+    if (!inp) return;
+    const k = b.dataset.k, st = inp.selectionStart ?? inp.value.length, en = inp.selectionEnd ?? inp.value.length;
+    inp.value = inp.value.slice(0, st) + k + inp.value.slice(en);
+    inp.focus();
+    inp.setSelectionRange(st + k.length, st + k.length);
+  });
+  $("#tablaFill").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || e.target.tagName !== "INPUT") return;
+    e.preventDefault();
+    const inputs = $$("#tablaFill input");
+    const i = inputs.indexOf(e.target);
+    if (i < inputs.length - 1) inputs[i + 1].focus(); else checkTabla();
+  });
+  segmented($("#tablaSel"), (v) => { TB.id = v; buildTabla(); });
+  segmented($("#tablaNivel"), (v) => { TB.nivel = v; buildTabla(); });
+  $("#tablaCheck").addEventListener("click", () => checkTabla());
+  $("#tablaShow").addEventListener("click", () => checkTabla(true));
+  $("#tablaReset").addEventListener("click", buildTabla);
+
   /* ================= inicio ================= */
   resetFlash();
   buildCorr();
+  renderSelTablas();
+  buildTabla();
   nuevoCaso();
   showTab(store.get("tab", "flash"));
 })();
