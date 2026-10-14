@@ -1,4 +1,4 @@
-# De los foros a Torreón — storytelling animado (56 s, 9:16)
+# De los foros a Torreón — storytelling animado (89 s, 9:16)
 
 ## 1. Concepto
 - **Tema:** cómo llegó la cultura incel a México y su posible relación con el ataque en la Secundaria 13 de Torreón.
@@ -52,9 +52,12 @@ Hablar con un joven a tiempo puede más que cualquier algoritmo.
 ## 4. Subtítulos
 Están en `subtitulos.srt` y también van quemados en el MP4.
 
-## 5. Sonido (pendiente)
-El MP4 lleva una pista de audio silenciosa.
-- **Voz:** español mexicano, cálida y pausada, sin dramatizar. Deja una pausa de 1 s antes de «1 de octubre de 2026».
+## 5. Sonido
+**Voz en off incluida.** Se generó en ElevenLabs con la voz «Joaquín – Rich and Captivating», que es masculina, mexicana y grave. Se usó el modelo `eleven_flash_v2_5` porque es el más barato: costó 538.5 créditos con una sola toma.
+- `voz_raw.mp3` es el audio original y dura 104.6 s. `render.py` lo acelera 1.25× sin cambiar el tono y lo deja en 83.7 s.
+- Las escenas se sincronizan con el inicio de cada frase, según la transcripción por palabra (Scribe, que costó 0 créditos).
+
+Lo que sigue es opcional:
 - **Música:** piano o pad ambiental grave, a −20 dB debajo de la voz. Se apaga en el plano de la vela final.
 - **Efectos:** sonido sutil de lápiz en las apariciones. No uses golpes, gritos ni sirenas.
 

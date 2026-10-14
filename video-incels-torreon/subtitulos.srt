@@ -1,48 +1,48 @@
 1
-00:00:00,000 --> 00:00:04,000
+00:00:00,000 --> 00:00:05,610
 ¿Cómo llega una idea nacida en foros de internet hasta una secundaria de Torreón?
 
 2
-00:00:04,000 --> 00:00:08,500
+00:00:05,610 --> 00:00:11,666
 En los años 90, «incel» era un sitio de apoyo en línea para personas solitarias.
 
 3
-00:00:08,500 --> 00:00:12,500
+00:00:11,666 --> 00:00:18,195
 Con los años, esos foros se llenaron de resentimiento… y de odio hacia las mujeres.
 
 4
-00:00:12,500 --> 00:00:16,500
+00:00:18,195 --> 00:00:25,050
 Ataques en EE. UU. y Canadá convirtieron esa subcultura en una alerta mundial.
 
 5
-00:00:16,500 --> 00:00:21,000
+00:00:25,050 --> 00:00:31,997
 A México no llegó en avión: llegó en memes, videos y algoritmos, ya en español.
 
 6
-00:00:21,000 --> 00:00:25,000
+00:00:31,997 --> 00:00:38,647
 Especialistas notan que su visibilidad creció tras la pandemia, sobre todo entre jóvenes.
 
 7
-00:00:25,000 --> 00:00:30,000
+00:00:38,647 --> 00:00:49,449
 Septiembre de 2025: en el CCH Sur asesinan a un alumno de 16 años. Analistas señalan códigos incel.
 
 8
-00:00:30,000 --> 00:00:33,500
+00:00:49,449 --> 00:00:56,452
 1 de octubre de 2026. Secundaria 13, ejido La Unión, Torreón.
 
 9
-00:00:33,500 --> 00:00:38,500
+00:00:56,452 --> 00:01:04,579
 Dos exalumnos atacaron el plantel. Murió la subdirectora, Nery Edith Nevárez. Hubo cuatro heridos.
 
 10
-00:00:38,500 --> 00:00:43,000
+00:01:04,579 --> 00:01:11,926
 La Fiscalía investiga una posible afinidad con comunidades incel. El motivo no está confirmado.
 
 11
-00:00:43,000 --> 00:00:47,500
+00:01:11,926 --> 00:01:19,644
 Ninguna ideología actúa sola: hay aislamiento, señales ignoradas y pantallas sin nadie del otro lado.
 
 12
-00:00:47,500 --> 00:00:51,500
+00:01:19,644 --> 00:01:24,160
 Hablar con un joven a tiempo puede más que cualquier algoritmo.
 

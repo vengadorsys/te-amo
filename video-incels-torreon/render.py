@@ -241,6 +241,20 @@ SCENES = [
 
 XFADE = 0.35  # segundos de fundido entre escenas
 
+# Sincronía con la voz en off (ElevenLabs, voz «Joaquín», acelerada 1.25x -> voz.wav).
+# Inicio de cada frase en el audio original, según la transcripción por palabra.
+VOICE = Path(__file__).with_name("voz.wav")
+TEMPO = 1.25
+RAW_VOICE = VOICE.with_name("voz_raw.mp3")
+if RAW_VOICE.exists() and not VOICE.exists():
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-i", str(RAW_VOICE), "-af", f"atempo={TEMPO}",
+                    "-ar", "48000", "-ac", "2", str(VOICE)], check=True)
+VOICE_STARTS = [0.0, 7.012, 14.582, 22.744, 31.312, 39.996, 48.309,
+                61.811, 70.565, 80.724, 89.907, 99.555, 105.2]  # último = fin de voz + pausa
+if VOICE.exists():
+    marks = [t / TEMPO for t in VOICE_STARTS]
+    SCENES = [(b - a, *rest) for a, b, (_, *rest) in zip(marks, marks[1:], SCENES)] + [SCENES[-1]]
+
 
 # ---------- render ----------
 
@@ -339,7 +353,8 @@ def main():
     ff = subprocess.Popen([
         "ffmpeg", "-y", "-loglevel", "error",
         "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
-        "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
+        *(["-i", str(VOICE), "-af", "apad"] if VOICE.exists()
+          else ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]),
         "-shortest", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(OUT)], stdin=subprocess.PIPE)
 
